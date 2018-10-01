@@ -1,0 +1,114 @@
+.App {
+    text-align: center;
+    background-color: #003036;
+    color: #fff;
+    min-height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.App-logo {
+    height: 80px;
+}
+
+.App-header {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    color: #eee;
+}
+
+.App-intro {
+    font-size: large;
+}
+
+code {
+    color: #e73a37;
+}
+
+input,
+select {
+    width: 60%;
+    margin: 1%;
+    padding: 1.5%;
+    border-radius: 5px;
+    background-color: #001010;
+    color: #fff;
+    border: 0;
+    font-size: 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select {
+    width: 20%;
+    min-width: 100p;
+    cursor: pointer;
+    outline: none;
+}
+
+option {
+    font-size: 16px;
+    border: 0px;
+    outline: none;
+}
+
+.sort-button {
+    cursor: pointer;
+}
+
+.sort-button:hover {
+    opacity: 0.6;
+}
+
+header {
+    position: relative;
+    overflow: hidden;
+}
+
+header p,
+header h1 {
+    position: relative;
+    z-index: 1;
+}
+
+header video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.searchArea {
+    padding: 5%;
+    padding-top: 1%;
+    height: 100%;
+}
+
+.store {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.store .item {
+    flex-grow: 1;
+    margin: 1%;
+    padding: 1%;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 3px #000;
+    transition: .3s ease;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: darken;
+    width: 200px;
+    height: 200px;
+}
+
+.store .item:hover {
+    padding: 2%;
+    margin: 0;
+    transition: .2s ease;
+    cursor: pointer;
+    background-blend-mode: initial;
+}

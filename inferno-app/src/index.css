@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'WorkSans';
+    font-weight: normal;
+    src: local('WorkSans'), url('./fonts/WorkSans-Medium.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'WorkSans';
+    font-weight: bold;
+    src: local('WorkSans'), url('./fonts/WorkSans-Bold.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'WorkSans';
+    font-weight: lighter;
+    src: local('WorkSans'), url('./fonts/WorkSans-Light.ttf') format('ttf');
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "WorkSans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: lighter;
+}
