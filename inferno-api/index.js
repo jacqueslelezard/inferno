@@ -40,7 +40,8 @@ app.get('/api/1/search/:term', function (req, res) {
 })
 
 //Delete an existing app by id
-app.delete('/api/1/apps/:appId', function (req, res) {
+app.delete('/api/1/apps', function (req, res) {
+    console.log("hé")
     if (req.query.appId) {
         var appId = req.query.appId;
         readData2(removeData(removeData, appId))
@@ -50,7 +51,7 @@ app.delete('/api/1/apps/:appId', function (req, res) {
 })
 
 //launch server
-app.listen(port, () => console.log(`Inferno api listening on port ${port}!`))
+app.listen((process.env.PORT || 3001), () => console.log(`Inferno api listening on port ${port}!`))
 
 
 //functions--------------------------------

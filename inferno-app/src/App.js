@@ -1,9 +1,7 @@
 import {
-    version,
     Component
 } from 'inferno';
 import './registerServiceWorker';
-import logo from './logo';
 import './App.css';
 var algoliasearch = require('algoliasearch');
 var client = algoliasearch('N2K83PZDUD', '35b4d2caced22b7b1d894cc2701eae18');
@@ -11,9 +9,6 @@ var index = client.initIndex('inferno');
 
 
 class App extends Component {
-    constructor() {
-        super();
-    };
     render() {
         return ( < div className = "App" >
             <
@@ -35,8 +30,6 @@ class App extends Component {
 };
 
 
-
-
 class NameForm extends App {
     constructor(props) {
         super(props);
@@ -47,12 +40,10 @@ class NameForm extends App {
             categoriesList: ["All", "Books", "Business", "Games", "Navigation", "Newsstand", "Social Networking", "Medical", "News", "Catalogs", "Education", "Sports", "Music", "Photo & Video", "Travel", "Finance", "Productivity", "Entertainment"],
             sortOrder: 'asc',
         };
-        //this.displayedItems = [];
-        console.log(this.state.categoriesList);
         this.handleChange = this.handleChange.bind(this);
         index.setSettings({
             'searchableAttributes': [
-            'name', 'category', 'rank'
+            'name', 'category'
           ],
             replicas: [
                 "ascendentRanking",
@@ -79,7 +70,7 @@ class NameForm extends App {
         this.search();
     }
     reverseSorting = () => {
-        if (this.sortOrder == "desc") {
+        if (this.sortOrder === "desc") {
             this.sortOrder = "asc";
         } else {
             this.sortOrder = "desc"
@@ -94,7 +85,7 @@ class NameForm extends App {
 
 
     search = () => {
-        if (this.state.category != "" && this.state.category != "All") {
+        if (this.state.category !== "" && this.state.category !== "All") {
             console.log("searching for " + this.state.value + " in " + this.state.category + " category");
             index.search(this.state.value, {
                 filters: 'category:' + this.state.category
@@ -145,7 +136,6 @@ class NameForm extends App {
                 label
                 for = "title" > Filter by: < /label>
 
-
                 <
                 select id = "category"
                 name = "category"
@@ -172,7 +162,7 @@ class NameForm extends App {
                                 style = {
                                     item.bgimage
                                 } > < h2 > {
-                                    item.name + " " + item.rank
+                                    item.name
                                 } < /h2> < /div >
                             })
                         } < /div > < /form > < /
@@ -180,7 +170,5 @@ class NameForm extends App {
                     );
                 }
             };
-
-            var oldData = ['red', 'green', 'blue'];
 
             export default App;
