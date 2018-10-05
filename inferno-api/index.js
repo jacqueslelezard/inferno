@@ -28,23 +28,25 @@ app.post('/api/1/apps', function (req, res) {
     } else {
         res.send('Your app should have the following structure: newApp: {name: "name of my app", image: "url of the image", link: "link to the app", category: "main category of your app", rank: "rank of your app}');
     }
-
-
 })
 
 //Search for a specific term
-app.get('/api/1/search/:term', function (req, res) {
-    index.search(req.params.term, function (err, content) {
+app.get('/api/1/apps', function (req, res) {
+    console.log("searching for " + req.query.term);
+    index.search(req.query.term, function (err, content) {
+        if (err) {
+            return console.log(err);
+            res.send("Error while searching in the data, look for the logs");
+        }
         res.send(content.hits);
     });
 })
 
 //Delete an existing app by id
 app.delete('/api/1/apps', function (req, res) {
-    console.log("hé")
     if (req.query.appId) {
         var appId = req.query.appId;
-        readData2(removeData(removeData, appId))
+        readData2(removeData, appId);
     } else {
         res.send("You miss the appId parameter")
     }
@@ -76,17 +78,23 @@ function indexData(jsonFile) {
 //}
 
 function readData2(callback, newData) {
+    console.log("reading data...");
     fs.readFile('./data.json', 'utf8', function (err, data) {
         if (err) {
             return console.log(err);
+            res.send("Error while reading the json file, data might be corrupted");
         }
         data = JSON.parse(data);
         callback(data, newData);
     });
-
 }
 
 function addData(data, newData) {
+    //update the index
+    index.addObjects([newData], function (err, content) {
+        console.log("The app has been indexed");
+        return (content.objectIDs[0]);
+    });
     //add data to the json
     data.push(newData);
     fs.writeFile('./data.json', JSON.stringify(data), function (err) {
@@ -95,22 +103,17 @@ function addData(data, newData) {
         }
         console.log("The app has been added to the local database");
     });
-    //update the index
-    index.addObjects([newData], function (err, content) {
-        console.log("The app has been indexed");
-        console.log(content);
-        return (content.objectIDs[0]);
-    });
+    res.send("The app is being added to the index");
 }
 
-
-function removeData(id) {
-    //removed data from the json
-    //TODO
+function removeData(data, id) {
     //update the index
     index.deleteObjects([id], function (err, content) {
         if (err) throw err;
         console.log(content);
         console.log("The app has been removed from index");
     });
+    //remove the data from the json
+    //TODO
+    res.send("The app is being deleted from the index");
 }
