@@ -5,8 +5,9 @@ import './registerServiceWorker';
 import './App.css';
 var algoliasearch = require('algoliasearch');
 var client = algoliasearch('N2K83PZDUD', '35b4d2caced22b7b1d894cc2701eae18');
-var index = client.initIndex('inferno');
-
+var indexAsc = client.initIndex('ascendentRanking');
+var indexDesc = client.initIndex('descendentRanking');
+var searchIndex = indexAsc;
 
 class App extends Component {
     render() {
@@ -29,7 +30,6 @@ class App extends Component {
     };
 };
 
-
 class NameForm extends App {
     constructor(props) {
         super(props);
@@ -41,21 +41,7 @@ class NameForm extends App {
             sortOrder: 'asc',
         };
         this.handleChange = this.handleChange.bind(this);
-        index.setSettings({
-            'searchableAttributes': [
-            'name', 'category'
-          ],
-            replicas: [
-                "ascendentRanking",
-                "decendentRanking"
-            ],
-            'attributesForFaceting': ['category'],
-            'customRanking': [this.sortOrder + '(rank)']
-        }, {
-            forwardToReplicas: true
-        }, function (err, content) {
-            console.log(content);
-        });
+
     }
     handleChange = (event) => {
         this.setState({
@@ -70,50 +56,61 @@ class NameForm extends App {
         this.search();
     }
     reverseSorting = () => {
+        console.log(searchIndex);
         if (this.sortOrder === "desc") {
+            searchIndex = indexAsc;
             this.sortOrder = "asc";
         } else {
-            this.sortOrder = "desc"
+            searchIndex = indexDesc;
+            this.sortOrder = "desc";
         }
-        let sorting = this.sortOrder + '(rank)'
-        index.setSettings({
-            'customRanking': [sorting]
-        }, {
-            forwardToReplicas: true
-        })
+        this.search();
     }
 
-
     search = () => {
+        //TODO some refactoring
         if (this.state.category !== "" && this.state.category !== "All") {
             console.log("searching for " + this.state.value + " in " + this.state.category + " category");
-            index.search(this.state.value, {
+            searchIndex.search(this.state.value, {
                 filters: 'category:' + this.state.category
             }, (err, content) => {
-                if (content) {
-                    console.log(content.hits);
+                if (content.hits.length > 0) {
                     this.setState({
                         displayedItems: content.hits
                     });
+                    document.getElementById("fallback").style.opacity = 0;
                 } else {
-                    console.log("no item found")
+                    console.log("no item found" + err);
+                    this.setState({
+                        displayedItems: []
+                    });
+                    document.getElementById("fallback").style.opacity = 0.3;
                 }
 
             });
         } else {
             console.log("searching for " + this.state.value + " in all categories");
-            index.search(this.state.value, (err, content) => {
-                if (content) {
-                    console.log(content.hits);
+            searchIndex.search(this.state.value, (err, content) => {
+                if (content.hits.length > 0) {
                     this.setState({
                         displayedItems: content.hits
                     });
+                    document.getElementById("fallback").style.opacity = 0;
                 } else {
-                    console.log("no item found")
+                    console.log("no item found" + err);
+                    this.setState({
+                        displayedItems: []
+                    });
+                    document.getElementById("fallback").style.opacity = 0.3;
                 }
             });
         }
 
+    }
+
+    componentDidMount() {
+        //set focus on input on page opening
+        document.getElementById("searchBox").focus();
     }
 
     render() {
@@ -125,10 +122,11 @@ class NameForm extends App {
                 Search
                 for: < /label> <
                 input type = "text"
+                id = "searchBox"
                 value = {
                     this.state.value
                 }
-                placeholder = "books?"
+                placeholder = "some books?"
                 onInput = {
                     this.handleChange
                 }
@@ -165,8 +163,9 @@ class NameForm extends App {
                                     item.name
                                 } < /h2> < /div >
                             })
-                        } < /div > < /form > < /
+                        } < span id = "fallback" > No item(yet!) < /span> < /div > < /form > < /
                         section >
+
                     );
                 }
             };

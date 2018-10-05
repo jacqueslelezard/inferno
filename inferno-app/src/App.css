@@ -103,6 +103,7 @@ header video {
     background-blend-mode: darken;
     width: 200px;
     height: 200px;
+    animation: appear .4s ease;
 }
 
 .store .item:hover {
@@ -111,4 +112,30 @@ header video {
     transition: .2s ease;
     cursor: pointer;
     background-blend-mode: initial;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: scale(1.1);
+    }
+
+    ;
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    ;
+}
+
+#fallback {
+    font-size: 30px;
+    padding: 5%;
+    padding-left: 10%;
+    transition: .3s ease;
+    opacity: 0.3;
+    font-weight: lighter;
+    text-align: center;
 }
