@@ -12,7 +12,7 @@ var appJSON = require('./data.json');
 //routing--------------------------------
 //check if everything is fine
 app.get('/', function (req, res) {
-    res.send('Hello, welcome to the test api, use POST/DELETE to /api/1/apps to add/remove an app')
+    res.send('<html><body style="padding: 5%;font-family: Arial;">Hello, welcome to the Algolia test api<br/> Use <b>GET + term</b> to make a quick search, <b>POST + {jsonOfYourApp}</b> to add a new app and <b>DELETE + appId</b> to delete an app, all these calls must be sent to this endpoint: <b>/api/1/apps</b></body><html>')
 })
 
 //Post a new app
@@ -20,7 +20,7 @@ app.post('/api/1/apps', function (req, res) {
     if (req.query.newApp) {
         var newApp = JSON.parse(req.query.newApp);
         if (newApp.name && newApp.image && newApp.link && newApp.category && newApp.rank) {
-            readData2(addData, newApp);
+            readData(addData, newApp);
             res.send('Adding the app ' + appId);
         } else {
             res.send('You miss one of the following parameters: name, image, link, category, rank');
@@ -46,7 +46,7 @@ app.get('/api/1/apps', function (req, res) {
 app.delete('/api/1/apps', function (req, res) {
     if (req.query.appId) {
         var appId = req.query.appId;
-        readData2(removeData, appId);
+        readData(removeData, appId);
     } else {
         res.send("You miss the appId parameter")
     }
@@ -66,18 +66,7 @@ function indexData(jsonFile) {
     });
 }
 
-//function readData() {
-//    fs.readFile('./data.json', 'utf8', function (err, data) {
-//        if (err) {
-//            return console.log(err);
-//        }
-//        data = JSON.parse(data);
-//        console.log(data[0]);
-//        return data;
-//    });
-//}
-
-function readData2(callback, newData) {
+function readData(callback, newData) {
     console.log("reading data...");
     fs.readFile('./data.json', 'utf8', function (err, data) {
         if (err) {
